@@ -25,7 +25,7 @@ def planet(bot, update):
                  update.message.text)
     planet = update.message.text.split()
     print(planet[1])
-    const = ephem.Mars('03/10/2019')
+    const = ephem.Mars('05/10/2019')
     print(ephem.constellation(const))
     update.message.reply_text(ephem.constellation(const))
 
