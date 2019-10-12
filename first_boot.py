@@ -2,6 +2,9 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import ephem
 from setting import TOKEN
+from new_post_api import URL
+from new_post_api import get_api
+
 logging.basicConfig(format = '%(asctime)s - %(levelname)s  - %(message)s',
                     level=logging.INFO,
                     filename='bot.log')
@@ -30,6 +33,13 @@ def planet(bot, update):
     update.message.reply_text(ephem.constellation(const))
 
 
+def tracking_new_post(bot, update):
+    user_info = update.message.text.split()
+    retturn_message = get_api(URL,user_info[1])
+    update.message.reply_text(retturn_message)
+
+
+
 def main():
     mybot = Updater(TOKEN) # передаем ключ
 
@@ -39,6 +49,7 @@ def main():
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     dp.add_handler(CommandHandler('planet', planet))
+    dp.add_handler(CommandHandler('track',tracking_new_post))
 
     mybot.start_polling() # бот начинает ломится в телеграмм
     mybot.idle() # будет работать бот пока мы его не остановим
