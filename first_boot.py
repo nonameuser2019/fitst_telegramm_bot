@@ -34,9 +34,19 @@ def planet(bot, update):
 
 
 def tracking_new_post(bot, update):
+    logging.info('User: %s, Chat id: %s, Message: %s', update.message.chat.first_name, update.message.chat.id,
+                 update.message.text)
     user_info = update.message.text.split()
-    retturn_message = get_api(URL,user_info[1])
-    update.message.reply_text(retturn_message)
+    print(user_info)
+    try:
+        if len(user_info[1]) == 11 or len(user_info[1]) == 14 :
+            return_message = get_api(URL,user_info[1])
+            update.message.reply_text(return_message)
+        else:
+            update.message.reply_text('Вы ввели не коректный номер отслеживания, номер отслеживания должен '
+                                      'состоять из 11 или 14 цифр, повторите пожалуйста ввод.')
+    except:
+        update.message.reply_text('Введенный номер отслеживания не корректен, проверьте его и попробуйте снова')
 
 
 
@@ -49,7 +59,7 @@ def main():
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     dp.add_handler(CommandHandler('planet', planet))
-    dp.add_handler(CommandHandler('track',tracking_new_post))
+    dp.add_handler(CommandHandler('t',tracking_new_post))
 
     mybot.start_polling() # бот начинает ломится в телеграмм
     mybot.idle() # будет работать бот пока мы его не остановим
